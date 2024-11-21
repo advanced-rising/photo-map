@@ -1,1 +1,3 @@
 # photo-map
+
+TEST
