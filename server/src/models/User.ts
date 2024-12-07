@@ -1,10 +1,11 @@
 import { Table, Column, Model, DataType } from 'sequelize-typescript';
+import { User as UserType } from '../types/user.types';
 
 @Table({
   tableName: 'users',
   timestamps: true,
 })
-export class User extends Model {
+export class User extends Model implements UserType {
   @Column({
     type: DataType.INTEGER,
     autoIncrement: true,
@@ -15,6 +16,7 @@ export class User extends Model {
   @Column({
     type: DataType.STRING,
     allowNull: false,
+    unique: true,
   })
   email!: string;
 
@@ -26,15 +28,16 @@ export class User extends Model {
 
   @Column({
     type: DataType.STRING,
-    allowNull: true,
+    allowNull: false,
+    unique: true,
   })
-  googleId?: string;
+  googleId!: string;
 
   @Column({
     type: DataType.TEXT,
-    allowNull: true,
+    allowNull: false,
   })
-  accessToken?: string;
+  accessToken!: string;
 
   @Column({
     type: DataType.TEXT,

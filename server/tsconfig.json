@@ -13,8 +13,16 @@
       "@/*": ["src/*"],
       "@models/*": ["src/models/*"],
       "@services/*": ["src/services/*"],
-      "@config/*": ["src/config/*"]
-    }
+      "@config/*": ["src/config/*"],
+      "@routes/*": ["src/api/routes/*"],
+      "@controllers/*": ["src/api/controllers/*"],
+
+      "@types/*": ["src/types/*"]
+    },
+
+    "typeRoots": ["./src/types", "./node_modules/@types"],
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules"]

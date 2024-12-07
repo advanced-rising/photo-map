@@ -3,9 +3,13 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "start": "node dist/index.js",
-    "dev": "nodemon --exec ts-node src/index.ts",
+    "local": "cross-env NODE_ENV=local nodemon --exec ts-node -r tsconfig-paths/register src/index.ts",
+    "dev": "cross-env NODE_ENV=development nodemon --exec ts-node -r tsconfig-paths/register src/index.ts",
     "build": "tsc",
+    "start": "cross-env NODE_ENV=production node -r tsconfig-paths/register dist/index.ts",
+    "start:prod": "npm run build && cross-env NODE_ENV=production node dist/index.js",
+    "clean": "rimraf dist",
+    "prebuild": "npm run clean",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -14,10 +18,12 @@
   "description": "",
   "dependencies": {
     "@googlemaps/google-maps-services-js": "^3.4.0",
+    "@types/express-session": "^1.18.1",
     "axios": "^1.7.9",
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
+    "express-session": "^1.18.1",
     "google-auth-library": "^9.15.0",
     "googleapis": "^144.0.0",
     "mysql2": "^3.11.5",
@@ -29,7 +35,9 @@
     "@types/express": "^5.0.0",
     "@types/node": "^22.10.1",
     "@types/sequelize": "^4.28.20",
+    "cross-env": "^7.0.3",
     "nodemon": "^3.1.7",
+    "rimraf": "^5.0.10",
     "ts-node": "^10.9.2",
     "tsconfig-paths": "^4.2.0",
     "typescript": "^5.7.2"
