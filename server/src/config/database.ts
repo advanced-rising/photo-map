@@ -1,16 +1,36 @@
 import { Sequelize } from 'sequelize-typescript';
-import dotenv from 'dotenv';
-
-dotenv.config();
+import { ENV } from './env';
 
 const sequelize = new Sequelize({
   dialect: 'mysql',
-  host: process.env.DB_HOST,
-  username: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-  database: process.env.DB_NAME,
-  logging: false, // SQL 쿼리 로깅 여부
-  models: [__dirname + '/../models'], // 모델 파일들의 위치
+  host: ENV.DB_HOST,
+  port: Number(ENV.DB_PORT),
+  username: ENV.DB_USER,
+  password: ENV.DB_PASSWORD,
+  database: ENV.DB_NAME,
+  logging: false,
+  models: [__dirname + '/../models'],
+  dialectOptions: {
+    allowPublicKeyRetrieval: true,
+    useSSL: false,
+  },
+  pool: {
+    max: 5,
+    min: 0,
+    acquire: 30000,
+    idle: 10000,
+  },
 });
+
+// 데이터베이스 연결 테스트 함수
+export const testConnection = async () => {
+  try {
+    await sequelize.authenticate();
+    console.log('Database connection has been established successfully.');
+  } catch (error) {
+    console.error('Unable to connect to the database:', error);
+    throw error;
+  }
+};
 
 export default sequelize;
