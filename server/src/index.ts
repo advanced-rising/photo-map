@@ -1,54 +1,34 @@
-import cors from 'cors';
-import dotenv from 'dotenv';
-import express from 'express';
-import session from 'express-session';
-import authRoutes from './api/routes/auth';
-import sequelize from './config/database';
+// 모듈 패스를 읽기 위해 module alias 를 사용한다.
+require('module-alias/register');
+require('source-map-support').install();
+require('dotenv').config();
+import logger from '@lib/logger';
+// set default timezone
+import moment from 'moment-timezone';
+import App from './app';
+moment.tz.setDefault('Asia/Seoul');
 
-dotenv.config();
+const _logger = logger.createLogger('AppRoot');
 
-const app = express();
+const PORT = process.env.PORT || '3001';
 
-// 미들웨어 설정
-app.use(cors());
-app.use(express.json());
+process.on('uncaughtException', (error) => {
+  console.error('Unhandled Exception:', error);
+  // 필요한 경우 여기서 로깅, 알림, 또는 재시작 로직을 구현할 수 있음
+});
 
-// 세션 미들웨어 설정
-app.use(
-  session({
-    secret: process.env.SESSION_SECRET || 'your-secret-key',
-    resave: false,
-    saveUninitialized: false,
-    cookie: {
-      secure: process.env.NODE_ENV === 'production',
-      maxAge: 24 * 60 * 60 * 1000, // 24시간
-    },
-  })
-);
+process.on('unhandledRejection', (reason, promise) => {
+  console.error('Unhandled Rejection at:', promise, 'reason:', reason);
+  // 프로미스 거부를 로그로 남기고 계속 진행
+});
 
-// 라우트 설정
-app.use('/auth', authRoutes);
-
-// 데이터베이스 연결 및 서버 시작
-const startServer = async () => {
-  try {
-    await sequelize.authenticate();
-    console.log('데이터베이스 연결 성공');
-
-    // 개발 환경에서만 사용 (테이블 자동 생성)
-    if (process.env.NODE_ENV === 'development') {
-      await sequelize.sync({ alter: true });
-      console.log('데이터베이스 동기화 완료');
-    }
-
-    const PORT = process.env.PORT || 3001;
-    app.listen(PORT, () => {
-      console.log(`서버가 http://localhost:${PORT} 에서 실행중입니다`);
+const APP = new App();
+APP.setup()
+  .then((server) => {
+    server.listen(PORT, () => {
+      _logger.info('Express server listening on port ' + PORT);
     });
-  } catch (error) {
-    console.error('데이터베이스 연결 실패:', error);
-    process.exit(1);
-  }
-};
-
-startServer();
+  })
+  .catch((err) => {
+    console.log(err);
+  });

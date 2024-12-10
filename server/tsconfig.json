@@ -1,29 +1,32 @@
 {
   "compilerOptions": {
-    "target": "es2016",
+    "target": "es6",
     "module": "commonjs",
-    "rootDir": "./src",
-    "outDir": "./dist",
+    "sourceMap": true,
+    "allowSyntheticDefaultImports": true,
+    "allowJs": true,
+    "outDir": "./dist/",
+    "noImplicitAny": false,
+    "lib": ["es2015", "DOM"],
     "esModuleInterop": true,
-    "forceConsistentCasingInFileNames": true,
-    "strict": true,
-    "skipLibCheck": true,
-    "baseUrl": ".",
-    "paths": {
-      "@/*": ["src/*"],
-      "@models/*": ["src/models/*"],
-      "@services/*": ["src/services/*"],
-      "@config/*": ["src/config/*"],
-      "@routes/*": ["src/api/routes/*"],
-      "@controllers/*": ["src/api/controllers/*"],
-
-      "@types/*": ["src/types/*"]
-    },
-
-    "typeRoots": ["./src/types", "./node_modules/@types"],
     "experimentalDecorators": true,
-    "emitDecoratorMetadata": true
+    "emitDecoratorMetadata": true,
+    "resolveJsonModule": true, // resolve json module
+    "baseUrl": "./src",
+    "paths": {
+      "@models/*": ["models/*"],
+      "@services/*": ["services/*"],
+      "@config/*": ["config/*"],
+      "@modules/*": ["modules/*"],
+      "@utils/*": ["utils/*"],
+      "@app/*": ["app/*"],
+      "@lib/*": ["lib/*"],
+      "@types/*": ["types/*"],
+      "@api/*": ["api/*"],
+      "@shared/*": ["shared/*"],
+      "@interface/*": ["interface/*"]
+    }
   },
-  "include": ["src/**/*"],
-  "exclude": ["node_modules"]
+  "include": ["./src/**/*", "./src/**/*.json"],
+  "exclude": ["node_modules", "dist"]
 }

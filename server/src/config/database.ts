@@ -1,13 +1,13 @@
 import { Sequelize } from 'sequelize-typescript';
-import { ENV } from './env';
+import { DB_HOST, DB_NAME, DB_PASSWORD, DB_USER, ENV } from './env';
 
 const sequelize = new Sequelize({
   dialect: 'mysql',
-  host: ENV.DB_HOST,
+  host: DB_HOST,
   port: Number(ENV.DB_PORT),
-  username: ENV.DB_USER,
-  password: ENV.DB_PASSWORD,
-  database: ENV.DB_NAME,
+  username: DB_USER,
+  password: DB_PASSWORD,
+  database: DB_NAME,
   logging: false,
   models: [__dirname + '/../models'],
   dialectOptions: {

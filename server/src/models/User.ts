@@ -1,8 +1,8 @@
 import { Table, Column, Model, DataType } from 'sequelize-typescript';
-import { User as UserType } from '../types/user.types';
+import { User as UserType } from '../shared/user.types';
 
 @Table({
-  tableName: 'users',
+  tableName: 'user',
   timestamps: true,
 })
 export class User extends Model implements UserType {

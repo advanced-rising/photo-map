@@ -1,12 +1,13 @@
 import { Request, Response } from 'express';
 import { google } from 'googleapis';
-import { AuthStatus, GoogleUserInfo } from '@/types';
-import { UserService } from '@/services/user.service';
+import { UserService } from '@services/user.service';
+import { GoogleUserInfo } from '@shared/google.types';
+import { AuthStatus } from '@shared/auth.types';
 
 const oauth2Client = new google.auth.OAuth2(
   process.env.GOOGLE_CLIENT_ID,
   process.env.GOOGLE_CLIENT_SECRET,
-  process.env.GOOGLE_REDIRECT_URI
+  process.env.GOOGLE_REDIRECT_URI,
 );
 
 const SCOPES = [
@@ -48,18 +49,9 @@ export const googleCallback = async (req: Request, res: Response): Promise<void>
     // DB에 사용자 저장 또는 업데이트
     const existingUser = await UserService.findUserByGoogleId(userInfo.id);
     if (existingUser) {
-      await UserService.updateUserTokens(
-        existingUser.id,
-        tokens.access_token!,
-        tokens.refresh_token || ''
-      );
+      await UserService.updateUserTokens(existingUser.id, tokens.access_token!, tokens.refresh_token || '');
     } else {
-      await UserService.createUser(
-        userInfo.email,
-        userInfo.id,
-        tokens.access_token!,
-        tokens.refresh_token || ''
-      );
+      await UserService.createUser(userInfo.email, userInfo.id, tokens.access_token!, tokens.refresh_token || '');
     }
 
     res.redirect(process.env.CLIENT_URL || 'http://localhost:3001');

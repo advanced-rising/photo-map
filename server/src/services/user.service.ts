@@ -1,12 +1,7 @@
-import { User } from '@models/User';
+import { User } from '@models/user';
 
 export class UserService {
-  static async createUser(
-    email: string,
-    googleId: string,
-    accessToken: string,
-    refreshToken: string
-  ) {
+  static async createUser(email: string, googleId: string, accessToken: string, refreshToken: string) {
     try {
       return await User.create({
         email,

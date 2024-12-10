@@ -23,17 +23,14 @@ export async function listPhotos(auth: OAuth2Client) {
   try {
     const accessToken = (await auth.getAccessToken()).token;
 
-    const response = await axios.get<PhotosResponse>(
-      'https://photoslibrary.googleapis.com/v1/mediaItems',
-      {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-        params: {
-          pageSize: 10,
-        },
-      }
-    );
+    const response = await axios.get<PhotosResponse>('https://photoslibrary.googleapis.com/v1/mediaItems', {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+      params: {
+        pageSize: 10,
+      },
+    });
 
     return response.data;
   } catch (error) {
